@@ -3,11 +3,34 @@
 MPU9250 mpu;
 
 const static uint8_t IMU_ADDR = 0x68;
-const static byte Z_H_GYRO_REG = 0x47;
-const static byte Z_L_GYRO_REG = 0x48;
-const static float GYRO_SENS = 131.0;
 const static float GYRO_CAL = 1.0;
 float gyroZSpeed = 0.0;
+
+enum GripStrength {
+  NoGrip,
+  LightGrip,
+  NormalGrip,
+  TightGrip,
+  WhiteKnuckleGrip,
+};
+GripStrength prevGrip = NoGrip, curGrip = NoGrip;
+
+String gripToString(GripStrength grip) {
+  switch (grip) {
+    case NoGrip:
+      return String("No Grip");
+    case LightGrip:
+      return String("Light Grip");
+    case NormalGrip:
+      return String("Normal Grip");
+    case TightGrip:
+      return String("Tight Grip");
+    case WhiteKnuckleGrip:
+      return String("White Knuckle Grip");
+    default:
+      return String("Unknown Grip");
+  }
+}
 
 int fsrPin = 0;     // the FSR and 10K pulldown are connected to a0
 int fsrReading;     // the analog reading from the FSR resistor divider
@@ -16,33 +39,6 @@ int prevSpeed = 0, currSpeed = 0;
 
 int whiteKnuckleIncidents = 0;
 int whippingIncidents = 0;
-
-int16_t toTwoByte(byte high, byte low) {
-  return high << 8 | low;
-}
-
-int16_t readTwoByteRegs(byte high_reg, byte low_reg) {
-  Wire.beginTransmission(IMU_ADDR);
-  Wire.write(high_reg);
-  Wire.endTransmission();
-
-  Wire.requestFrom(IMU_ADDR, 1);
-  byte high_b = Wire.read();
-
-  Wire.beginTransmission(IMU_ADDR);
-  Wire.write(low_reg);
-  Wire.endTransmission();
-  
-  Wire.requestFrom(IMU_ADDR, 1);
-  byte low_b = Wire.read();
-  
-  return toTwoByte(high_b, low_b);
-}
-
-float readZGyro() {
-  int16_t raw_gyro = readTwoByteRegs(Z_H_GYRO_REG, Z_L_GYRO_REG);
-  return raw_gyro / GYRO_SENS;
-}
 
 bool isDangerousTurn(int speed, float turnVel) {
   return (speed >= 65 && turnVel > 50) ||
@@ -97,23 +93,31 @@ void loop(void) {
   float curZGyro = abs(mpu.getGyroZ());
   Serial.print("Z Gyro (degs/s):");
   Serial.print(curZGyro);
-  Serial.print(" ");
+  Serial.print(" - ");
+
+  prevGrip = curGrip;
   
   // We'll have a few threshholds, qualitatively determined
   if (fsrReading < 550) {
-    Serial.println(" - Not Holding Wheel");
+    curGrip = NoGrip;
   } else if (fsrReading < 600) {
-    Serial.println(" - Lightly Holding Wheel");
+    curGrip = LightGrip;
   } else if (fsrReading < 720) {
-    Serial.println(" - Normal Holding Wheel");
+    curGrip = NormalGrip;
   } else if (fsrReading < 800) {
-    Serial.println(" - Gripping Wheel");
+    curGrip = TightGrip;
   } else {
-    Serial.println(" - White Knuckling");
+    curGrip = WhiteKnuckleGrip;
+  }
+
+  Serial.println(gripToString(curGrip));
+  if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
+    whiteKnuckleIncidents++;
   }
 
   if (isDangerousTurn(currSpeed, curZGyro)) {
-    Serial.println("DANGEROUS TURN DETECTED"); 
+    Serial.println("DANGEROUS TURN DETECTED");
+    whippingIncident++;
   }
   
   delay(200);
