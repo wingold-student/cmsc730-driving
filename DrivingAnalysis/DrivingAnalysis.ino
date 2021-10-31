@@ -57,12 +57,22 @@ void setup(void) {
             delay(5000);
         }
     }
-  Serial.println("Please leave the device still on the flat plane.");
+  Serial.println("Leave the device still...");
   mpu.calibrateAccelGyro();
   Serial.println("Starting....");
 }
  
 void loop(void) {
+  if (Serial.available() > 0) {
+    Serial.println("============END============");
+    Serial.print("Whipping Incidents: ");
+    Serial.println(whippingIncidents);
+    Serial.print("White Knuckle Incidents: ");
+    Serial.println(whiteKnuckleIncidents);
+    Serial.flush();
+    exit(0);
+  }
+  
   if(currSpeed >= 85)
   {
     inc = false;
@@ -117,7 +127,7 @@ void loop(void) {
 
   if (isDangerousTurn(currSpeed, curZGyro)) {
     Serial.println("DANGEROUS TURN DETECTED");
-    whippingIncident++;
+    whippingIncidents++;
   }
   
   delay(200);
