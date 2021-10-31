@@ -1,4 +1,7 @@
+#include <MPU9250.h>
 #include <Wire.h>
+MPU9250 mpu;
+
 const static uint8_t IMU_ADDR = 0x68;
 const static byte Z_H_GYRO_REG = 0x47;
 const static byte Z_L_GYRO_REG = 0x48;
@@ -42,13 +45,25 @@ float readZGyro() {
 }
 
 bool isDangerousTurn(int speed, float turnVel) {
-  return false;
+  return (speed >= 65 && turnVel > 50) ||
+          (speed >= 45 && turnVel > 80) ||
+          (speed >= 25 && turnVel > 130);
 }
 
 void setup(void) {
   // We'll send debugging information via the Serial monitor
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin();
+
+  if (!mpu.setup(IMU_ADDR)) {  // change to your own address
+        while (1) {
+            Serial.println("MPU connection failed.");
+            delay(5000);
+        }
+    }
+  Serial.println("Please leave the device still on the flat plane.");
+  mpu.calibrateAccelGyro();
+  Serial.println("Starting....");
 }
  
 void loop(void) {
@@ -71,7 +86,6 @@ void loop(void) {
 
   fsrReading = analogRead(fsrPin);
   int i = 0;
-
   
   Serial.print("Analog reading: ");
   Serial.print(fsrReading);     // the raw analog reading
@@ -79,9 +93,10 @@ void loop(void) {
   Serial.print(currSpeed);
   Serial.print(" ");
 
-  gyroZSpeed = readZGyro();
+  mpu.update();
+  float curZGyro = abs(mpu.getGyroZ());
   Serial.print("Z Gyro (degs/s):");
-  Serial.print(gyroZSpeed);
+  Serial.print(curZGyro);
   Serial.print(" ");
   
   // We'll have a few threshholds, qualitatively determined
@@ -95,6 +110,10 @@ void loop(void) {
     Serial.println(" - Gripping Wheel");
   } else {
     Serial.println(" - White Knuckling");
+  }
+
+  if (isDangerousTurn(currSpeed, curZGyro)) {
+    Serial.println("DANGEROUS TURN DETECTED"); 
   }
   
   delay(200);
