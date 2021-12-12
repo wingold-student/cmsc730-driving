@@ -6,6 +6,8 @@ const static uint8_t IMU_ADDR = 0x68;
 const static float GYRO_CAL = 1.0;
 float gyroZSpeed = 0.0;
 
+bool printToMonitor = false;
+
 enum GripStrength {
   NoGrip,
   LightGrip,
@@ -35,7 +37,7 @@ String gripToString(GripStrength grip) {
 int fsrPin = 0;     // the FSR and 10K pulldown are connected to a0
 int fsrReading;     // the analog reading from the FSR resistor divider
 bool inc = true;
-int prevSpeed = 0, currSpeed = 0;
+int prevSpeed = 0, currSpeed = 25;
 
 int whiteKnuckleIncidents = 0;
 int whippingIncidents = 0;
@@ -46,30 +48,80 @@ bool isDangerousTurn(int speed, float turnVel) {
           (speed >= 25 && turnVel > 130);
 }
 
-void setup(void) {
-  // We'll send debugging information via the Serial monitor
-  Serial.begin(115200);
-  Wire.begin();
-
-  if (!mpu.setup(IMU_ADDR)) {  // change to your own address
-        while (1) {
-            Serial.println("MPU connection failed.");
-            delay(5000);
-        }
-    }
-  Serial.println("Leave the device still...");
-  mpu.calibrateAccelGyro();
-  Serial.println("Starting....");
-}
- 
-void loop(void) {
-  if (Serial.available() > 0) {
+void printEndForSerialMonitor() {
     Serial.println("============END============");
     Serial.print("Whipping Incidents: ");
     Serial.println(whippingIncidents);
     Serial.print("White Knuckle Incidents: ");
     Serial.println(whiteKnuckleIncidents);
     Serial.flush();
+}
+
+void printOutputForSerialMonitor(int fsrReading, GripStrength curGrip, int currSpeed, float curZGyro) {
+  Serial.print("Analog reading: ");
+  Serial.print(fsrReading);     // the raw analog reading
+  Serial.print(" Current Speed: ");
+  Serial.print(currSpeed);
+  Serial.print(" ");
+
+  Serial.print("Z Gyro (degs/s):");
+  Serial.print(curZGyro);
+  Serial.print(" - ");
+
+  Serial.println(gripToString(curGrip));
+
+  if (isDangerousTurn(currSpeed, curZGyro)) {
+    Serial.println("DANGEROUS TURN DETECTED");
+  }
+}
+
+void printDataAsCSV(GripStrength curGrip, int currSpeed, float curZGyro) {
+  Serial.print(currSpeed);
+  Serial.print(",");
+  Serial.print(curGrip);
+  Serial.print(",");
+  Serial.print(curZGyro);
+  Serial.print(",");
+  if (isDangerousTurn(currSpeed, curZGyro)) {
+    Serial.print(1);
+  } else {
+    Serial.print(0);
+  }
+  Serial.println("");
+}
+
+void printEndAsCSV() {
+  Serial.print(whiteKnuckleIncidents);
+  Serial.print(",");
+  Serial.println(whippingIncidents);
+  Serial.flush();
+}
+
+void setup(void) {
+  // We'll send debugging information via the Serial monitor
+  Serial.begin(115200);
+  Wire.begin();
+
+  if (!mpu.setup(IMU_ADDR)) {
+        while (1) {
+            Serial.println("MPU connection failed.");
+            delay(5000);
+        }
+    }
+  if (printToMonitor) {
+    Serial.println("Leave the device still...");
+  }
+  mpu.calibrateAccelGyro();
+
+  if (printToMonitor) {
+    Serial.println("Starting....");
+  }
+}
+ 
+void loop(void) {
+  if (Serial.available() > 0) {
+    // printEndForSerialMonitor();
+    printEndAsCSV();
     exit(0);
   }
   
@@ -92,18 +144,9 @@ void loop(void) {
 
   fsrReading = analogRead(fsrPin);
   int i = 0;
-  
-  Serial.print("Analog reading: ");
-  Serial.print(fsrReading);     // the raw analog reading
-  Serial.print(" Current Speed: ");
-  Serial.print(currSpeed);
-  Serial.print(" ");
 
   mpu.update();
   float curZGyro = abs(mpu.getGyroZ());
-  Serial.print("Z Gyro (degs/s):");
-  Serial.print(curZGyro);
-  Serial.print(" - ");
 
   prevGrip = curGrip;
   
@@ -120,15 +163,16 @@ void loop(void) {
     curGrip = WhiteKnuckleGrip;
   }
 
-  Serial.println(gripToString(curGrip));
+  // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
+  printDataAsCSV(curGrip, currSpeed, curZGyro);
+
   if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
     whiteKnuckleIncidents++;
   }
 
   if (isDangerousTurn(currSpeed, curZGyro)) {
-    Serial.println("DANGEROUS TURN DETECTED");
     whippingIncidents++;
   }
   
-  delay(200);
+  delay(1000);
 } 
