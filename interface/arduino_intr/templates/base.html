@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <canvas id="foo">
+            </canvas>
+        </div>
+
+        <div class="row">
+            <div class="col-3 text-center">
+                <h3>
+                    Speed: 
+                    <small id="speed">68</small>
+                </h3>
+            </div>
+            <div class="col-3 text-center">
+                <h3>
+                    Grip:
+                    <small id="grip">Normal Grip</small>
+                </h3>
+            </div>
+
+            <div class="col-3 text-center">
+                <h3>
+                    Z Gyro: 
+                    <small id="gyro">110.7</small>
+                </h3>
+            </div>
+
+            <div class="col-3 text-center">
+                <h4 id="whip">Dangerous Turn Detected!</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="offset-4 col-4 text-center">
+                <button type="button" class="btn btn-danger" id="end">End</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-2 col-4 text-center">
+                <h4 id="wki"></h4>
+            </div>
+            <div class="col-4 text-center">
+                <h4 id="whpi"></h4>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/gauge.min.js') }}"></script>
+    <!--
+    <script type="module" src="{{ url_for('static', filename='js/stream.js') }}"></script>
+    -->
+    <script type="module">
+        import "{{ url_for('static', filename='js/gauge.min.js') }}"
+        var opts = {
+            angle: 0.15, // The span of the gauge arc
+            lineWidth: 0.44, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.6, // // Relative to gauge radius
+                strokeWidth: 0.035, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+            colorStart: '#6FADCF',   // Colors
+            colorStop: '#8FC0DA',    // just experiment with them
+            strokeColor: '#E0E0E0',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,     // High resolution support
+            renderTicks: {
+                divisions: 10,
+                divWidth: 1.1,
+                divLength: 0.7,
+                divColor: '#333333',
+                subDivisions: 5,
+                subLength: 0.5,
+                subWidth: 0.6,
+                subColor: '#666666',
+            }
+            
+        };
+        var target = document.getElementById('foo'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.maxValue = 85; // set max gauge value
+        gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        gauge.animationSpeed = 32; // set animation speed (32 is default value)
+        gauge.set(0); // set actual value
+
+
+        function endArduino() {
+            fetch("/stop-arduino")
+                .then(response => response.body)
+                .then(rb => {
+                    console.log(rb);
+                    const reader = rb.getReader();
+                    const { value, done } = reader.read();
+                    var endData = new TextDecoder().decode(value).split(',');
+                    console.log(endData);
+                });
+        }
+
+        document.getElementById("end").addEventListener("click", endArduino);
+
+        function gripToString(grip) {
+            switch (grip) {
+                case 0:
+                    return "No Grip";
+                case 1:
+                    return "Light Grip";
+                case 2:
+                    return "Normal Grip";
+                case 3:
+                    return "Tight Grip";
+                case 4:
+                    return "White Knuckle Grip";
+                default:
+                    return "Unknown Grip";
+            }
+        }
+
+        function whipToString(whip) {
+            if (whip == 1) {
+                return "Dangerous Turn Detected!";
+            }
+
+            return "";
+        }
+
+        async function process() {
+            //const response = await fetch("/teststream")
+            const response = await fetch("/arduino-data")
+            const reader = response.body.getReader();
+
+            var speedSpan = document.getElementById('speed');
+            var gripSpan = document.getElementById('grip');
+            var gyroSpan = document.getElementById('gyro');
+            var whipHeader = document.getElementById('whip');
+
+            var wki = document.getElementById("wki");
+            var whpi = document.getElementById("whpi");
+
+            while (true) {
+                const { value, done } = await reader.read();
+                var ardData = new TextDecoder().decode(value).split(',');
+                console.log(ardData);
+
+                if (ardData.length == 2) {
+                    wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
+                    whpi.innerHTML = "White Knucle Incidents: " + parseInt(ardData[0]);
+                }
+
+                var speedStr = ardData[0] + " mph";
+                var speed = parseInt(speedStr);
+
+                var grip = parseInt(ardData[1]);
+                var gripStr = gripToString(grip);
+
+                var gyroStr = ardData[2];
+                var gyroSpeed = parseFloat(gyroStr);
+
+                var whipStr = ardData[3];
+                var whipInt = parseInt(whipStr);
+                var whipFullStr = whipToString(whipInt);
+
+                console.log("Speed: " + speed + " Grip: " + gripStr + " Gyro Speed: " + gyroSpeed + " Dangeroud Turn Detected: " + whipFullStr);
+                speedSpan.innerHTML = speedStr;
+                gripSpan.innerHTML = gripStr;
+                gyroSpan.innerHTML = gyroStr;
+                whipHeader.innerHTML = whipFullStr;
+
+                if (done) {
+                    console.log('Done');
+                    break;
+                }
+
+                gauge.set(speed);
+            }
+        }
+        // process();
+        gauge.set(68);
+    </script>
+</body>
+</html>
