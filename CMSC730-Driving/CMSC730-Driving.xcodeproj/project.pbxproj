@@ -1,0 +1,641 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D1474B627658976006629EA /* CMSC730-Driving WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3D1474B527658976006629EA /* CMSC730-Driving WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3D1474BB2765897A006629EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1474BA2765897A006629EA /* Assets.xcassets */; };
+		3D1474C12765897A006629EA /* CMSC730-Driving WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3D1474C02765897A006629EA /* CMSC730-Driving WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3D1474C62765897A006629EA /* CMSC730_DrivingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1474C52765897A006629EA /* CMSC730_DrivingApp.swift */; };
+		3D1474C82765897A006629EA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1474C72765897A006629EA /* ContentView.swift */; };
+		3D1474CA2765897A006629EA /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1474C92765897A006629EA /* NotificationController.swift */; };
+		3D1474CC2765897A006629EA /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1474CB2765897A006629EA /* NotificationView.swift */; };
+		3D1474CE2765897A006629EA /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1474CD2765897A006629EA /* ComplicationController.swift */; };
+		3D1474D02765897B006629EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1474CF2765897B006629EA /* Assets.xcassets */; };
+		3D1474D32765897B006629EA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1474D22765897B006629EA /* Preview Assets.xcassets */; };
+		3D4A342F27658CEB0067F33E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4A342E27658CEB0067F33E /* HealthKit.framework */; };
+		3D4A3438276657630067F33E /* ConnectButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4A3437276657630067F33E /* ConnectButtonView.swift */; };
+		3D4A343B276657ED0067F33E /* ConnectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4A343A276657ED0067F33E /* ConnectButton.swift */; };
+		3D4A343E276658330067F33E /* HBViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4A343D276658330067F33E /* HBViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3D1474B727658976006629EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D1474AB27658976006629EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D1474B427658976006629EA;
+			remoteInfo = "CMSC730-Driving WatchKit App";
+		};
+		3D1474C22765897A006629EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D1474AB27658976006629EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D1474BF2765897A006629EA;
+			remoteInfo = "CMSC730-Driving WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3D1474DB2765897B006629EA /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3D1474C12765897A006629EA /* CMSC730-Driving WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1474DF2765897B006629EA /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				3D1474B627658976006629EA /* CMSC730-Driving WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3D1474B127658976006629EA /* CMSC730-Driving.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMSC730-Driving.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D1474B527658976006629EA /* CMSC730-Driving WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMSC730-Driving WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D1474BA2765897A006629EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D1474C02765897A006629EA /* CMSC730-Driving WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "CMSC730-Driving WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D1474C52765897A006629EA /* CMSC730_DrivingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSC730_DrivingApp.swift; sourceTree = "<group>"; };
+		3D1474C72765897A006629EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3D1474C92765897A006629EA /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		3D1474CB2765897A006629EA /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		3D1474CD2765897A006629EA /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		3D1474CF2765897B006629EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D1474D22765897B006629EA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3D1474D42765897B006629EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D1474D52765897B006629EA /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		3D4A342C27658CEA0067F33E /* CMSC730-Driving WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CMSC730-Driving WatchKit Extension.entitlements"; sourceTree = "<group>"; };
+		3D4A342E27658CEB0067F33E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS8.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		3D4A3437276657630067F33E /* ConnectButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectButtonView.swift; sourceTree = "<group>"; };
+		3D4A343A276657ED0067F33E /* ConnectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectButton.swift; sourceTree = "<group>"; };
+		3D4A343D276658330067F33E /* HBViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HBViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D1474BD2765897A006629EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D4A342F27658CEB0067F33E /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D1474AA27658976006629EA = {
+			isa = PBXGroup;
+			children = (
+				3D1474B927658976006629EA /* CMSC730-Driving WatchKit App */,
+				3D1474C42765897A006629EA /* CMSC730-Driving WatchKit Extension */,
+				3D1474B227658976006629EA /* Products */,
+				3D4A342D27658CEB0067F33E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		3D1474B227658976006629EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D1474B127658976006629EA /* CMSC730-Driving.app */,
+				3D1474B527658976006629EA /* CMSC730-Driving WatchKit App.app */,
+				3D1474C02765897A006629EA /* CMSC730-Driving WatchKit Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3D1474B927658976006629EA /* CMSC730-Driving WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				3D1474BA2765897A006629EA /* Assets.xcassets */,
+			);
+			path = "CMSC730-Driving WatchKit App";
+			sourceTree = "<group>";
+		};
+		3D1474C42765897A006629EA /* CMSC730-Driving WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A343C276658120067F33E /* View Models */,
+				3D4A3439276657DA0067F33E /* Custom Styles */,
+				3D4A3436276657530067F33E /* Views */,
+				3D4A342C27658CEA0067F33E /* CMSC730-Driving WatchKit Extension.entitlements */,
+				3D1474C52765897A006629EA /* CMSC730_DrivingApp.swift */,
+				3D1474C72765897A006629EA /* ContentView.swift */,
+				3D1474C92765897A006629EA /* NotificationController.swift */,
+				3D1474CB2765897A006629EA /* NotificationView.swift */,
+				3D1474CD2765897A006629EA /* ComplicationController.swift */,
+				3D1474CF2765897B006629EA /* Assets.xcassets */,
+				3D1474D42765897B006629EA /* Info.plist */,
+				3D1474D52765897B006629EA /* PushNotificationPayload.apns */,
+				3D1474D12765897B006629EA /* Preview Content */,
+			);
+			path = "CMSC730-Driving WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		3D1474D12765897B006629EA /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				3D1474D22765897B006629EA /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3D4A342D27658CEB0067F33E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A342E27658CEB0067F33E /* HealthKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D4A3436276657530067F33E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A3437276657630067F33E /* ConnectButtonView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3D4A3439276657DA0067F33E /* Custom Styles */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A343A276657ED0067F33E /* ConnectButton.swift */,
+			);
+			path = "Custom Styles";
+			sourceTree = "<group>";
+		};
+		3D4A343C276658120067F33E /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A343D276658330067F33E /* HBViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3D1474B027658976006629EA /* CMSC730-Driving */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1474E02765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving" */;
+			buildPhases = (
+				3D1474AF27658976006629EA /* Resources */,
+				3D1474DF2765897B006629EA /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D1474B827658976006629EA /* PBXTargetDependency */,
+			);
+			name = "CMSC730-Driving";
+			productName = "CMSC730-Driving";
+			productReference = 3D1474B127658976006629EA /* CMSC730-Driving.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		3D1474B427658976006629EA /* CMSC730-Driving WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1474DC2765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving WatchKit App" */;
+			buildPhases = (
+				3D1474B327658976006629EA /* Resources */,
+				3D1474DB2765897B006629EA /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D1474C32765897A006629EA /* PBXTargetDependency */,
+			);
+			name = "CMSC730-Driving WatchKit App";
+			productName = "CMSC730-Driving WatchKit App";
+			productReference = 3D1474B527658976006629EA /* CMSC730-Driving WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		3D1474BF2765897A006629EA /* CMSC730-Driving WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1474D82765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving WatchKit Extension" */;
+			buildPhases = (
+				3D1474BC2765897A006629EA /* Sources */,
+				3D1474BD2765897A006629EA /* Frameworks */,
+				3D1474BE2765897A006629EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CMSC730-Driving WatchKit Extension";
+			productName = "CMSC730-Driving WatchKit Extension";
+			productReference = 3D1474C02765897A006629EA /* CMSC730-Driving WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3D1474AB27658976006629EA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					3D1474B027658976006629EA = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					3D1474B427658976006629EA = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					3D1474BF2765897A006629EA = {
+						CreatedOnToolsVersion = 13.0;
+					};
+				};
+			};
+			buildConfigurationList = 3D1474AE27658976006629EA /* Build configuration list for PBXProject "CMSC730-Driving" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3D1474AA27658976006629EA;
+			productRefGroup = 3D1474B227658976006629EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3D1474B027658976006629EA /* CMSC730-Driving */,
+				3D1474B427658976006629EA /* CMSC730-Driving WatchKit App */,
+				3D1474BF2765897A006629EA /* CMSC730-Driving WatchKit Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D1474AF27658976006629EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1474B327658976006629EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1474BB2765897A006629EA /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1474BE2765897A006629EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1474D32765897B006629EA /* Preview Assets.xcassets in Resources */,
+				3D1474D02765897B006629EA /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D1474BC2765897A006629EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1474CA2765897A006629EA /* NotificationController.swift in Sources */,
+				3D1474C82765897A006629EA /* ContentView.swift in Sources */,
+				3D4A3438276657630067F33E /* ConnectButtonView.swift in Sources */,
+				3D4A343E276658330067F33E /* HBViewModel.swift in Sources */,
+				3D1474CE2765897A006629EA /* ComplicationController.swift in Sources */,
+				3D4A343B276657ED0067F33E /* ConnectButton.swift in Sources */,
+				3D1474C62765897A006629EA /* CMSC730_DrivingApp.swift in Sources */,
+				3D1474CC2765897A006629EA /* NotificationView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3D1474B827658976006629EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D1474B427658976006629EA /* CMSC730-Driving WatchKit App */;
+			targetProxy = 3D1474B727658976006629EA /* PBXContainerItemProxy */;
+		};
+		3D1474C32765897A006629EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D1474BF2765897A006629EA /* CMSC730-Driving WatchKit Extension */;
+			targetProxy = 3D1474C22765897A006629EA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3D1474D62765897B006629EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3D1474D72765897B006629EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3D1474D92765897B006629EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "CMSC730-Driving WatchKit Extension/CMSC730-Driving WatchKit Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CMSC730-Driving WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "CMSC730-Driving WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "CMSC730-Driving WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = CMSC730_Driving_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		3D1474DA2765897B006629EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "CMSC730-Driving WatchKit Extension/CMSC730-Driving WatchKit Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CMSC730-Driving WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "CMSC730-Driving WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "CMSC730-Driving WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = CMSC730_Driving_WatchKit_Extension.ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		3D1474DD2765897B006629EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = CMSC730_Driving_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "CMSC730-Driving WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		3D1474DE2765897B006629EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = CMSC730_Driving_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "CMSC730-Driving WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		3D1474E12765897B006629EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3D1474E22765897B006629EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 78T29RZ8UL;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cmsc730driving.drivingmonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3D1474AE27658976006629EA /* Build configuration list for PBXProject "CMSC730-Driving" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1474D62765897B006629EA /* Debug */,
+				3D1474D72765897B006629EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1474D82765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1474D92765897B006629EA /* Debug */,
+				3D1474DA2765897B006629EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1474DC2765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1474DD2765897B006629EA /* Debug */,
+				3D1474DE2765897B006629EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1474E02765897B006629EA /* Build configuration list for PBXNativeTarget "CMSC730-Driving" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1474E12765897B006629EA /* Debug */,
+				3D1474E22765897B006629EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3D1474AB27658976006629EA /* Project object */;
+}
