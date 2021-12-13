@@ -70,6 +70,9 @@ GasPress getGas() {
 
     if ((currTime - oldTime) > 200) {
       currSpeed += speedIncrease;
+      if (currSpeed > 110) {
+        currSpeed = 110;
+      }
       oldTime = currTime;
     }
 
