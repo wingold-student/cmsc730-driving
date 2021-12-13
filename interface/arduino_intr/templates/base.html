@@ -70,6 +70,18 @@
             </div>
         </div>
 
+        <div class="row" style="height:100px;">
+            <div class="col-offset-1 col-2">
+                <h4>Warnings: </h4>
+                <ul id="warnings">
+
+                </ul>
+            </div>
+            <div class="col-8" id="warning-color">
+
+            </div>
+        </div>
+
         <div class="row">
             <div class="offset-4 col-4 text-center">
                 <button type="button" class="btn btn-danger" id="end">End</button>
@@ -77,11 +89,14 @@
         </div>
 
         <div class="row">
-            <div class="offset-2 col-4 text-center">
+            <div class="col-4 text-center">
                 <h4 id="wki"></h4>
             </div>
             <div class="col-4 text-center">
                 <h4 id="whpi"></h4>
+            </div>
+            <div class="col-4 text-center">
+                <h4 id="brki"></h4>
             </div>
         </div>
 
@@ -217,21 +232,60 @@
             ctx.restore(); //restore the state of canvas
         }
 
+        var speedSpan = document.getElementById('speed');
+        var gripSpan = document.getElementById('grip');
+        var angleSpan = document.getElementById('angle');
+        var whipHeader = document.getElementById('whip');
+        var heartSpan = document.getElementById('heartrate');
+        var accelSpan = document.getElementById('accel');
+        var brakeSpan = document.getElementById('brake');
+
+        var wki = document.getElementById("wki");
+        var whpi = document.getElementById("whpi");
+        var brki = document.getElementById("brki");
+
+        var warningsList = document.getElementById("warnings");
+        var warningsColor = document.getElementById("warnings-color");
+
+        function clearWarning() {
+            while (warningsList.firstChild) {
+                warningsList.removeChild(warningsList.firstChild);
+            }
+
+            warningsColor.style.color = "white";
+        }
+
+        function createListItem(msg) {
+            var node = document.createElement("li");
+            var textNode = document.createTextNode(msg);
+            node.append(textNode);
+            return node;
+        }
+
+        function updateWarning(whiteKnuckle, whip, braking) {
+            if (whiteKnuckle) { 
+                var whiteKnuckleNode = createListItem("White Knuckling!");
+                warningsList.appendChild(whiteKnuckleNode);
+            }
+            if (whip) { 
+                var whipNode = createListItem("Dangerous Turn!");
+                warningsList.appendChild(whipNode);
+            }
+            if (braking) { 
+                var brakeNode = createListItem("Aggressive driving!");
+                warningsList.appendChild(brakeNode);
+            }
+
+            warningsColor.style.color = "red";
+
+            window.setTimeout(clearWarning, 3000);
+        }
+
+
         async function process() {
             //const response = await fetch("/teststream")
             const response = await fetch("/arduino-data")
             const reader = response.body.getReader();
-
-            var speedSpan = document.getElementById('speed');
-            var gripSpan = document.getElementById('grip');
-            var angleSpan = document.getElementById('angle');
-            var whipHeader = document.getElementById('whip');
-            var heartSpan = document.getElementById('heartrate');
-            var accelSpan = document.getElementById('accel');
-            var brakeSpan = document.getElementById('brake');
-
-            var wki = document.getElementById("wki");
-            var whpi = document.getElementById("whpi");
 
             while (true) {
                 const { value, done } = await reader.read();
@@ -253,17 +307,25 @@
                     var wheelAngle = parseFloat(wheelAngleStr);
                     turnWheel(wheelAngle);
 
-                    var whipStr = ardData[3];
+                    var heartRateStr = ardData[3];
+                    //var heartRate = parseInt(heartRate);
+
+                    var accelEnum = ardData[4];
+                    var accelStr = accelToString(accelEnum);
+                    var brakeEnum = ardData[5];
+                    var brakeStr = brakeToString(brakeEnum);
+
+                    var whipStr = ardData[6];
                     var whipInt = parseInt(whipStr);
                     var whipFullStr = whipToString(whipInt);
 
-                    var heartRateStr = ardData[4];
-                    //var heartRate = parseInt(heartRate);
+                    var brakeIncStr = ardData[7];
+                    var brakeIncInt = parseInt(brakeIncStr);
 
-                    var accelEnum = ardData[5];
-                    var accelStr = accelToString(accelEnum);
-                    var brakeEnum = ardData[6];
-                    var brakeStr = brakeToString(brakeEnum);
+                    var whiteKnuckleIncStr = ardData[8];
+                    var whiteKnuckleIncInt = parseInt(whiteKnuckleIncStr);
+
+                    updateWarning(whiteKnuckleIncInt, whipInt, brakeIncInt);
 
                     console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRateStr);
                     
@@ -280,7 +342,6 @@
                     console.log('Done');
                     break;
                 }
-
             }
         }
         process();
