@@ -51,18 +51,9 @@ void getGyroVel() {
   Serial.println(curr_gyro_z);
 }
 
-void getAvgGyroVel(uint32_t time_diff) {
-  if (time_diff == 0) {
-    return;
-  }
-  
+void updateAvgGyroVel(uint32_t time_diff) {
   if (time_diff >= time_bucket && gyro_bucket_size > 0) {
-    prev_gyro_z = curr_gyro_z;
     curr_gyro_z = gyro_bucket / gyro_bucket_size;
-    Serial.print("Z:");
-    Serial.print(curr_gyro_z);
-    Serial.print(", Bucket:");
-    Serial.println(gyro_bucket_size);
 
     gyro_bucket = 0.0;
     gyro_bucket_size = 0;
@@ -158,13 +149,11 @@ float getWheelAngle() {
   return actual_angle;
 }
 
-/** TODO:
- * Update with new acceleration reading, not velocity
- */
 bool isDangerousTurn(int speed, float turnVel) {
-  return (speed >= 65 && turnVel > 50) ||
-          (speed >= 45 && turnVel > 80) ||
-          (speed >= 25 && turnVel > 130);
+  return (speed >= 70 && turnVel > 25) ||
+          (speed >= 45 && turnVel > 40) ||
+          (speed >= 30 && turnVel > 70 ||
+          (speed >= 20 && turnVel > 130));
 }
 
 /** TODO:
@@ -177,18 +166,23 @@ bool isDangerousTurnAcc(int speed, float turnAcc) {
 }
 
 bool getDangerousTurn(int speed) {
+  dangerousTurnDetected = false;
   curr_ms = millis();
 
   time_diff = curr_ms - prev_ms;
-  bool is_new_acc = updateAvgGyroAcc(time_diff);
 
+  updateAvgGyroVel(time_diff);
+  dangerousTurnDetected = isDangerousTurn(speed, curr_gyro_z);
+
+  /*
+  bool is_new_acc = updateAvgGyroAcc(time_diff);
   if (is_new_acc) {
     dangerousTurnDetected = isDangerousTurnAcc(speed, curr_gyro_acc);
-    if (dangerousTurnDetected) {
-      whippingIncidents++;
-    }
-  } else {
-    dangerousTurnDetected = false;
+  } 
+  */
+
+  if (dangerousTurnDetected) {
+    whippingIncidents++;
   }
 
   return dangerousTurnDetected;
