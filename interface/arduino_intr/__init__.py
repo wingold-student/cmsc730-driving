@@ -46,7 +46,6 @@ def create_app(test_config=None):
                 yield row
         return app.response_class(generate())
 
-    '''
     arduino = serial.Serial(port='/dev/cu.usbserial-14440', baudrate=9600, timeout=0.5)
 
     @app.route("/arduino-data")
@@ -63,6 +62,5 @@ def create_app(test_config=None):
     def stopArduino():
         arduino.write(bytes("x\n", 'utf-8'))
         return ""
-    '''
 
     return app
