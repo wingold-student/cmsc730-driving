@@ -183,6 +183,9 @@ bool getDangerousTurn(int speed) {
 
   if (is_new_acc) {
     dangerousTurnDetected = isDangerousTurnAcc(speed, curr_gyro_acc);
+    if (dangerousTurnDetected) {
+      whippingIncidents++;
+    }
   } else {
     dangerousTurnDetected = false;
   }
