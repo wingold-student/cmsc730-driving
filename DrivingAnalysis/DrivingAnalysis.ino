@@ -1,52 +1,11 @@
-#include <MPU9250.h>
-#include <Wire.h>
-MPU9250 mpu;
+#include "./GripStrength/GripStrength.h"
+#include "./Wheel/Wheel.h"
+#include "./HeartRate/HeartRate.h"
 
-const static uint8_t IMU_ADDR = 0x68;
-const static float GYRO_CAL = 1.0;
-float gyroZSpeed = 0.0;
+bool printToMonitor = true, printForHuman = true;
 
-bool printToMonitor = false;
+int currSpeed = 0;
 
-enum GripStrength {
-  NoGrip,
-  LightGrip,
-  NormalGrip,
-  TightGrip,
-  WhiteKnuckleGrip,
-};
-GripStrength prevGrip = NoGrip, curGrip = NoGrip;
-
-String gripToString(GripStrength grip) {
-  switch (grip) {
-    case NoGrip:
-      return String("No Grip");
-    case LightGrip:
-      return String("Light Grip");
-    case NormalGrip:
-      return String("Normal Grip");
-    case TightGrip:
-      return String("Tight Grip");
-    case WhiteKnuckleGrip:
-      return String("White Knuckle Grip");
-    default:
-      return String("Unknown Grip");
-  }
-}
-
-int fsrPin = 0;     // the FSR and 10K pulldown are connected to a0
-int fsrReading;     // the analog reading from the FSR resistor divider
-bool inc = true;
-int prevSpeed = 0, currSpeed = 25;
-
-int whiteKnuckleIncidents = 0;
-int whippingIncidents = 0;
-
-bool isDangerousTurn(int speed, float turnVel) {
-  return (speed >= 65 && turnVel > 50) ||
-          (speed >= 45 && turnVel > 80) ||
-          (speed >= 25 && turnVel > 130);
-}
 
 void printEndForSerialMonitor() {
     Serial.println("============END============");
@@ -97,21 +56,65 @@ void printEndAsCSV() {
   Serial.flush();
 }
 
+void printData() {
+  if (printForHuman) {
+    Serial.print("Speed:\t")
+    Serial.print(currSpeed);
+    Serial.print("\t");
+
+    Serial.print("Grip:\t");
+    Serial.print(curGrip);
+    Serial.print("\t");
+
+    Serial.print("Angle:\t");
+    Serial.print(actual_angle);
+    Serial.print("\t");
+
+    Serial.print("DangerousTurn:\t");
+    Serial.print(dangerousTurnDetected);
+    Serial.print("\t");
+
+    Serial.print("HeartRate:\t");
+    Serial.print(heartRate);
+    Serial.print("\t");
+
+    // Acceleration
+
+    // Break
+
+    Serial.println();
+    
+  } else {
+    Serial.print(currSpeed);
+    Serial.print(",");
+
+    Serial.print(curGrip);
+    Serial.print(",");
+
+    Serial.print(actual_angle);
+    Serial.print(",");
+
+    Serial.print(dangerousTurnDetected);
+    Serial.print(",");
+
+    Serial.print(heartRate);
+    Serial.print(",");
+
+    // Acceleration
+
+    // Break
+
+    Serial.println();
+  }
+}
+
 void setup(void) {
   // We'll send debugging information via the Serial monitor
-  Serial.begin(115200);
+  Serial.begin(9600); // TODO: Can make higher if change HM-10?
   Wire.begin();
 
-  if (!mpu.setup(IMU_ADDR)) {
-        while (1) {
-            Serial.println("MPU connection failed.");
-            delay(5000);
-        }
-    }
-  if (printToMonitor) {
-    Serial.println("Leave the device still...");
-  }
-  mpu.calibrateAccelGyro();
+  setupHeartRate();
+  setupWheel();  
 
   if (printToMonitor) {
     Serial.println("Starting....");
@@ -124,55 +127,42 @@ void loop(void) {
     printEndAsCSV();
     exit(0);
   }
-  
-  if(currSpeed >= 85)
-  {
-    inc = false;
-  }
-  else if(currSpeed == 0)
-  {
-    inc = true;
-  }
-  
-  if(inc){
-    currSpeed++;
-  }
-  else
-  {
-    currSpeed--;
-  }
 
-  fsrReading = analogRead(fsrPin);
-  int i = 0;
+  /**
+   * @brief Get the Grip of the wheel
+   * 
+   * Updates curGrip value
+   * Updates whiteKnuckleIncidents
+   */
+  getGrip();
 
+  /**
+   * @brief Get the Wheel Angle
+   * Update the MPU readings
+   * Updates actual_angle value, 0 to 360.0
+   */
   mpu.update();
-  float curZGyro = abs(mpu.getGyroZ());
+  getWheelAngle();
 
-  prevGrip = curGrip;
-  
-  // We'll have a few threshholds, qualitatively determined
-  if (fsrReading < 550) {
-    curGrip = NoGrip;
-  } else if (fsrReading < 600) {
-    curGrip = LightGrip;
-  } else if (fsrReading < 720) {
-    curGrip = NormalGrip;
-  } else if (fsrReading < 800) {
-    curGrip = TightGrip;
-  } else {
-    curGrip = WhiteKnuckleGrip;
-  }
+  /**
+   * @brief Get the Heart Rate
+   * 
+   * Updates heartRate value from HM10
+   */
+  getHeartRate();
 
+  /**
+   * @brief Determines if a dangerous turn/whip was detected
+   * given the vehicles current speed
+   * 
+   * NOTE: This averages out acceleration over potentially
+   * multiple reads. E.g. every Wheel.time_bucket milliseconds
+   */
+  bool dangerousTurn = getDangerousTurn(currSpeed);
+
+  printData();
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
-  printDataAsCSV(curGrip, currSpeed, curZGyro);
+  //printDataAsCSV(curGrip, currSpeed, curZGyro);
 
-  if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
-    whiteKnuckleIncidents++;
-  }
-
-  if (isDangerousTurn(currSpeed, curZGyro)) {
-    whippingIncidents++;
-  }
-  
-  delay(1000);
+  //delay(1000);
 } 
