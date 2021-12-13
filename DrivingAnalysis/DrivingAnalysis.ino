@@ -3,7 +3,7 @@
 #include "./HeartRate/HeartRate.h"
 #include "./Pedals/Pedals.h"
 
-bool printForHuman = true;
+bool printForHuman = false;
 
 
 void pingUserOnDanger() {
@@ -214,5 +214,5 @@ void loop(void) {
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
   //printDataAsCSV(curGrip, currSpeed, curZGyro);
 
-  // delay(100);
+  delay(100);
 } 
