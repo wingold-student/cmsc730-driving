@@ -94,7 +94,7 @@ BrakePress getBrake() {
     } else {
         currBrake = DangBrake;
         speedDecrease = 2;
-        if ((currTime - lastFloor) > 5000) {
+        if ((currTime - lastFloor) < 5000) {
           brakingIncidents++;
           brakingIncidentDetected = true;
         }
