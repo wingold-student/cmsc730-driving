@@ -18,7 +18,7 @@
             <div class="col-3 text-center">
                 <h3>
                     Speed: 
-                    <small id="speed">68</small>
+                    <small id="speed">0</small>
                 </h3>
             </div>
             <div class="col-3 text-center">
@@ -30,13 +30,34 @@
 
             <div class="col-3 text-center">
                 <h3>
-                    Z Gyro: 
-                    <small id="gyro">110.7</small>
+                    Wheel Angle: 
+                    <small id="angle">0.0</small>
                 </h3>
             </div>
 
             <div class="col-3 text-center">
-                <h4 id="whip">Dangerous Turn Detected!</h4>
+                <h3>
+                    Heart Rate:
+                    <small id="heartrate">0</small>
+                </h3>
+            </div>
+
+            <div class="col-3 text-center">
+                <h3>
+                    Acceleration:
+                    <small id="accel">None</small>
+                </h3>
+            </div>
+
+            <div class="col-3 text-center">
+                <h3>
+                    Braking:
+                    <small id="brake">None</small>
+                </h3>
+            </div>
+
+            <div class="col-3 text-center">
+                <h4 id="whip"></h4>
             </div>
         </div>
 
@@ -45,6 +66,7 @@
                 <button type="button" class="btn btn-danger" id="end">End</button>
             </div>
         </div>
+
         <div class="row">
             <div class="offset-2 col-4 text-center">
                 <h4 id="wki"></h4>
@@ -137,6 +159,28 @@
             return "";
         }
 
+        function accelToString(accel) {
+            switch (accel) {
+                case 0:
+                    return "No Gas";
+                case 1:
+                    return "Light Gas";
+                case 2:
+                    return "Flooring";
+            }
+        }
+
+        function brakeToString(brake) {
+            switch (brake) {
+                case 0:
+                    return "Not Braking";
+                case 1:
+                    return "Light Braking";
+                case 2:
+                    return "Hard Braking";
+            }
+        }
+
         async function process() {
             //const response = await fetch("/teststream")
             const response = await fetch("/arduino-data")
@@ -144,8 +188,11 @@
 
             var speedSpan = document.getElementById('speed');
             var gripSpan = document.getElementById('grip');
-            var gyroSpan = document.getElementById('gyro');
+            var angleSpan = document.getElementById('angle');
             var whipHeader = document.getElementById('whip');
+            var heartSpan = document.getElementById('heartrate');
+            var accelSpan = document.getElementById('accel');
+            var brakeSpan = document.getElementById('brake');
 
             var wki = document.getElementById("wki");
             var whpi = document.getElementById("whpi");
@@ -158,37 +205,48 @@
                 if (ardData.length == 2) {
                     wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
                     whpi.innerHTML = "White Knucle Incidents: " + parseInt(ardData[0]);
+                } else {
+                    var speedStr = ardData[0] + " mph";
+                    var speed = parseInt(speedStr);
+                    gauge.set(speed);
+
+                    var grip = parseInt(ardData[1]);
+                    var gripStr = gripToString(grip);
+
+                    var wheelAngleStr = ardData[2];
+                    var wheelAngle = parseFloat(wheelAngleStr);
+
+                    var whipStr = ardData[3];
+                    var whipInt = parseInt(whipStr);
+                    var whipFullStr = whipToString(whipInt);
+
+                    var heartRateStr = ardData[4];
+                    var heartRate = parseInt(heartRate);
+
+                    var accelEnum = ardData[5];
+                    var accelStr = accelToString(accelEnum);
+                    var brakeEnum = ardData[6];
+                    var brakeStr = brakeToString(brakeEnum);
+
+                    console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRate);
+                    
+                    speedSpan.innerHTML = speedStr;
+                    gripSpan.innerHTML = gripStr;
+                    angleSpan.innerHTML = wheelAngle;
+                    whipHeader.innerHTML = whipFullStr;
+                    accelSpan.innerHTML = accelStr;
+                    brakeSpan.innerHTML = brakeStr;
                 }
-
-                var speedStr = ardData[0] + " mph";
-                var speed = parseInt(speedStr);
-
-                var grip = parseInt(ardData[1]);
-                var gripStr = gripToString(grip);
-
-                var gyroStr = ardData[2];
-                var gyroSpeed = parseFloat(gyroStr);
-
-                var whipStr = ardData[3];
-                var whipInt = parseInt(whipStr);
-                var whipFullStr = whipToString(whipInt);
-
-                console.log("Speed: " + speed + " Grip: " + gripStr + " Gyro Speed: " + gyroSpeed + " Dangeroud Turn Detected: " + whipFullStr);
-                speedSpan.innerHTML = speedStr;
-                gripSpan.innerHTML = gripStr;
-                gyroSpan.innerHTML = gyroStr;
-                whipHeader.innerHTML = whipFullStr;
 
                 if (done) {
                     console.log('Done');
                     break;
                 }
 
-                gauge.set(speed);
             }
         }
         // process();
-        gauge.set(68);
+        gauge.set(0);
     </script>
 </body>
 </html>
