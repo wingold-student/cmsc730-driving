@@ -10,8 +10,17 @@
     <div class="container">
 
         <div class="row">
-            <canvas id="foo">
-            </canvas>
+            <div class="col-6 text-center" style="height: 100%;">
+                <canvas id="foo" style="height:250px;">
+                </canvas>
+            </div>
+            <div class="col-6 text-center" style="height:100%;">
+                <!--
+                <img src="{{url_for('static', filename='img/steering-wheel-2.png')}}" style="height:400px;">
+                -->
+                <canvas id="steering-wheel">
+                </canvas>
+            </div>
         </div>
 
         <div class="row">
@@ -42,14 +51,14 @@
                 </h3>
             </div>
 
-            <div class="col-3 text-center">
+            <div class="col-4 text-center">
                 <h3>
                     Acceleration:
                     <small id="accel">None</small>
                 </h3>
             </div>
 
-            <div class="col-3 text-center">
+            <div class="col-4 text-center">
                 <h3>
                     Braking:
                     <small id="brake">None</small>
@@ -114,7 +123,7 @@
         };
         var target = document.getElementById('foo'); // your canvas element
         var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-        gauge.maxValue = 85; // set max gauge value
+        gauge.maxValue = 110; // set max gauge value
         gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
         gauge.animationSpeed = 32; // set animation speed (32 is default value)
         gauge.set(0); // set actual value
@@ -161,24 +170,51 @@
 
         function accelToString(accel) {
             switch (accel) {
-                case 0:
+                case "0":
                     return "No Gas";
-                case 1:
+                case "1":
                     return "Light Gas";
-                case 2:
+                case "2":
                     return "Flooring";
             }
         }
 
         function brakeToString(brake) {
             switch (brake) {
-                case 0:
+                case "0":
                     return "Not Braking";
-                case 1:
+                case "1":
                     return "Light Braking";
-                case 2:
+                case "2":
                     return "Hard Braking";
             }
+        }
+
+        var canvas = document.getElementById('steering-wheel');
+        var ctx = canvas.getContext('2d');
+        var img = new Image();
+        img.src = "{{url_for('static', filename='img/steering-wheel-2.png')}}"
+        var imgLoad = false;
+        function imgLoaded() {
+            imgLoad = true;
+            turnWheel(0);
+        }
+        img.onload = imgLoaded;
+
+        function turnWheel(ang) {
+            canvas.width = 250; //Any width
+            canvas.height = 250; //Any height
+            var cache = this; //cache the local copy of image element for future reference
+            var iw = 250; //cache.width;
+            var ih = 250; //cache.height;
+
+            ctx.save(); //saves the state of canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
+            ctx.translate(canvas.width/2, canvas.height/2); //let's translate
+            ctx.rotate(Math.PI / 180 * (ang)); //increment the angle and rotate the image 
+            ctx.translate(-(canvas.width/2), -(canvas.height/2)); //let's translate
+            ctx.drawImage(img, canvas.width/2 - iw/2, canvas.height/2 - ih/2, iw, ih); //draw the image ;)
+            ctx.restore(); //restore the state of canvas
         }
 
         async function process() {
@@ -204,7 +240,7 @@
 
                 if (ardData.length == 2) {
                     wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
-                    whpi.innerHTML = "White Knucle Incidents: " + parseInt(ardData[0]);
+                    whpi.innerHTML = "White Knuckle Incidents: " + parseInt(ardData[0]);
                 } else {
                     var speedStr = ardData[0] + " mph";
                     var speed = parseInt(speedStr);
@@ -215,20 +251,21 @@
 
                     var wheelAngleStr = ardData[2];
                     var wheelAngle = parseFloat(wheelAngleStr);
+                    turnWheel(wheelAngle);
 
                     var whipStr = ardData[3];
                     var whipInt = parseInt(whipStr);
                     var whipFullStr = whipToString(whipInt);
 
                     var heartRateStr = ardData[4];
-                    var heartRate = parseInt(heartRate);
+                    //var heartRate = parseInt(heartRate);
 
                     var accelEnum = ardData[5];
                     var accelStr = accelToString(accelEnum);
                     var brakeEnum = ardData[6];
                     var brakeStr = brakeToString(brakeEnum);
 
-                    console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRate);
+                    console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRateStr);
                     
                     speedSpan.innerHTML = speedStr;
                     gripSpan.innerHTML = gripStr;
@@ -236,6 +273,7 @@
                     whipHeader.innerHTML = whipFullStr;
                     accelSpan.innerHTML = accelStr;
                     brakeSpan.innerHTML = brakeStr;
+                    heartSpan.innerHTML = heartRateStr;
                 }
 
                 if (done) {
@@ -245,7 +283,7 @@
 
             }
         }
-        // process();
+        process();
         gauge.set(0);
     </script>
 </body>
