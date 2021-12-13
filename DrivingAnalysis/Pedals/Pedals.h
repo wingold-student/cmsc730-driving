@@ -8,6 +8,7 @@ unsigned long currTime = millis();
 unsigned long lastFloor = millis();
 
 int brakingIncidents = 0;
+bool brakingIncidentDetected = false;
 float currSpeed = 0;
 
 enum GasPress {
@@ -82,6 +83,7 @@ GasPress getGas() {
 BrakePress getBrake() {
     brakeReading = analogRead(brakePin);
     int speedDecrease = 0;
+    brakingIncidentDetected = false;
     
     currTime = millis();
     // We'll have a few threshholds, qualitatively determined
@@ -95,6 +97,7 @@ BrakePress getBrake() {
         speedDecrease = 2;
         if ((currTime - lastFloor) > 5000) {
           brakingIncidents++;
+          brakingIncidentDetected = true;
         }
     }
 

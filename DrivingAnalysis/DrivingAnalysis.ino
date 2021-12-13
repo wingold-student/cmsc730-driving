@@ -51,7 +51,12 @@ void printDataAsCSV(GripStrength curGrip, int currSpeed, float curZGyro) {
 void printEndAsCSV() {
   Serial.print(whiteKnuckleIncidents);
   Serial.print(",");
-  Serial.println(whippingIncidents);
+  
+  Serial.print(whippingIncidents);
+  Serial.print(",");
+
+  Serial.println(brakingIncidents);
+
   Serial.flush();
 }
 
@@ -98,9 +103,6 @@ void printData() {
     Serial.print(actual_angle);
     Serial.print(",");
 
-    Serial.print(dangerousTurnDetected);
-    Serial.print(",");
-
     Serial.print(heartRate);
     Serial.print(",");
 
@@ -110,6 +112,15 @@ void printData() {
 
     // Break
     Serial.print(currBrake);
+    Serial.print(",");
+
+    Serial.print(dangerousTurnDetected);
+    Serial.print(",");
+
+    Serial.print(brakingIncidentDetected);
+    Serial.print(",");
+
+    Serial.print(whiteKnuckleIncidentDetected);
 
     Serial.println();
   }
@@ -154,6 +165,7 @@ void loop(void) {
    * @brief Get the pressure on Brake
    * 
    * Updates curBrake value
+   * Updates brakingIncidents
    */
   getBrake();
 

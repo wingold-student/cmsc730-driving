@@ -2,6 +2,7 @@ int fsrPin = 0;     // the FSR and 10K pulldown are connected to a0
 int fsrReading;     // the analog reading from the FSR resistor divider
 
 int whiteKnuckleIncidents = 0;
+bool whiteKnuckleIncidentDetected = false;
 
 enum GripStrength {
   NoGrip,
@@ -48,7 +49,9 @@ GripStrength getGrip() {
 
     if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
         whiteKnuckleIncidents++;
+        whiteKnuckldeIncidentDetected = true;
     }
+    whiteKnuckleIncidentDetected = false;
 
     return curGrip;
 }
