@@ -50,7 +50,7 @@ String brakeToString(BrakePress brake) {
 
 GasPress getGas() {
     gasReading = analogRead(gasPin);
-    int speedIncrease = 0;
+    float speedIncrease = 0;
     currTime = millis();
     // We'll have a few threshholds, qualitatively determined
     if (gasReading < 5) {
@@ -81,7 +81,7 @@ GasPress getGas() {
 
 BrakePress getBrake() {
     brakeReading = analogRead(brakePin);
-    int speedDecrease = 0;
+    float speedDecrease = 0;
     brakingIncidentDetected = false;
     
     currTime = millis();
