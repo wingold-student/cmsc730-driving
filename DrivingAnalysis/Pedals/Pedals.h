@@ -56,7 +56,7 @@ GasPress getGas() {
     if (gasReading < 5) {
         currGas = NoGas;
         if (currSpeed > 0) {
-          speedIncrease = 0.5;
+          speedIncrease = -0.5;
         } else {
           currSpeed = 0;
         }
@@ -74,7 +74,6 @@ GasPress getGas() {
       if (currSpeed > 110) {
         currSpeed = 110;
       }
-      oldTime = currTime;
     }
 
     return currGas;
@@ -103,6 +102,9 @@ BrakePress getBrake() {
 
     if ((currTime - oldTime) > 200) {
       currSpeed -= speedDecrease;
+      if (currSpeed <= 0) {
+        currSpeed = 0;
+      }
       oldTime = currTime;
     }
 

@@ -199,6 +199,4 @@ void loop(void) {
   printData();
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
   //printDataAsCSV(curGrip, currSpeed, curZGyro);
-
-  delay(100);
 } 
