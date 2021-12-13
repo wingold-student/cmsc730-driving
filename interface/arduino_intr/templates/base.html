@@ -32,14 +32,14 @@
             </div>
             <div class="col-4 text-center">
                 <h3>
-                    Acceleration:
+                    Gas Pedal:
                     <small id="accel">None</small>
                 </h3>
             </div>
 
             <div class="col-4 text-center">
                 <h3>
-                    Braking:
+                    Brake Pedal:
                     <small id="brake">None</small>
                 </h3>
             </div>
@@ -56,7 +56,7 @@
             <div class="col-4 text-center">
                 <h3>
                     Heart Rate:
-                    <small id="heartrate">0</small>
+                    <small id="heartrate">0 BPM</small>
                 </h3>
             </div>
 
@@ -107,7 +107,7 @@
     <script type="module">
         import "{{ url_for('static', filename='js/gauge.min.js') }}"
         var opts = {
-            angle: 0.15, // The span of the gauge arc
+            angle: 0.0, // The span of the gauge arc
             lineWidth: 0.44, // The line thickness
             radiusScale: 1, // Relative radius
             pointer: {
@@ -123,11 +123,11 @@
             generateGradient: true,
             highDpiSupport: true,     // High resolution support
             renderTicks: {
-                divisions: 10,
+                divisions: 11,
                 divWidth: 1.1,
                 divLength: 0.7,
                 divColor: '#333333',
-                subDivisions: 5,
+                subDivisions: 10,
                 subLength: 0.5,
                 subWidth: 0.6,
                 subColor: '#666666',
@@ -243,6 +243,9 @@
 
         var warningsList = document.getElementById("warnings");
         var warningColor = document.getElementById("warning-color");
+        var currentlyWarning_grip = false;
+        var currentlyWarning_whip = false;
+        var currentlyWarning_brake = false;
 
         function clearWarning() {
             while (warningsList.firstChild) {
@@ -250,6 +253,9 @@
             }
 
             warningColor.style.background = "white";
+            currentlyWarning_grip = false;
+            currentlyWarning_whip = false;
+            currentlyWarning_brake = false;
         }
 
         function createListItem(msg) {
@@ -260,22 +266,31 @@
         }
 
         function updateWarning(whiteKnuckle, whip, braking) {
-            if (whiteKnuckle) { 
+
+            // console.log(whiteKnuckle, whip, braking);
+
+            if (whiteKnuckle && !currentlyWarning_grip) { 
+                currentlyWarning_grip = true;
                 var whiteKnuckleNode = createListItem("White Knuckling!");
                 warningsList.appendChild(whiteKnuckleNode);
             }
-            if (whip) { 
+            if (whip && !currentlyWarning_whip) { 
+                currentlyWarning_whip = true;
                 var whipNode = createListItem("Dangerous Turn!");
                 warningsList.appendChild(whipNode);
             }
-            if (braking) { 
+            if (braking && !currentlyWarning_brake) { 
+                currentlyWarning_brake = true;
                 var brakeNode = createListItem("Aggressive driving!");
                 warningsList.appendChild(brakeNode);
             }
 
-            warningColor.style.background = "red";
 
-            window.setTimeout(clearWarning, 3000);
+            if (whiteKnuckle == 1 || whip == 1 || braking == 1) {
+                warningColor.style.background = "red";
+                window.setTimeout(clearWarning, 3000);
+            }
+   
         }
 
 
@@ -305,7 +320,7 @@
                     var wheelAngle = parseFloat(wheelAngleStr);
                     turnWheel(wheelAngle);
 
-                    var heartRateStr = ardData[3];
+                    var heartRateStr = ardData[3] + " BPM";
 
                     var accelEnum = ardData[4];
                     var accelStr = accelToString(accelEnum);
@@ -329,7 +344,6 @@
                     speedSpan.innerHTML = speedStr;
                     gripSpan.innerHTML = gripStr;
                     angleSpan.innerHTML = wheelAngle;
-                    whipHeader.innerHTML = whipFullStr;
                     accelSpan.innerHTML = accelStr;
                     brakeSpan.innerHTML = brakeStr;
                     heartSpan.innerHTML = heartRateStr;
@@ -341,9 +355,8 @@
                 }
             }
         }
-        process();
-        // updateWarning(1, 0, 1);
         gauge.set(0);
+        process();
     </script>
 </body>
 </html>
