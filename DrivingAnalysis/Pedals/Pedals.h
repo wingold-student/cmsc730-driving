@@ -93,5 +93,5 @@ BrakePress getBrake() {
       oldTime = currTime;
     }
 
-    return curBrake;
+    return currBrake;
 }
