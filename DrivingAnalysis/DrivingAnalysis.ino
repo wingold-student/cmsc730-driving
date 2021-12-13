@@ -101,8 +101,11 @@ void printData() {
     Serial.print(",");
 
     // Acceleration
+    Serial.print(0);
+    Serial.print(",");
 
     // Break
+    Serial.print(0);
 
     Serial.println();
   }
