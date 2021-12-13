@@ -3,7 +3,7 @@
 #include "./HeartRate/HeartRate.h"
 #include "./Pedals/Pedals.h"
 
-bool printToMonitor = true, printForHuman = true;
+bool printToMonitor = false, printForHuman = false;
 
 
 void printEndForSerialMonitor() {
@@ -57,7 +57,7 @@ void printEndAsCSV() {
 
 void printData() {
   if (printForHuman) {
-    Serial.print("Speed:\t")
+    Serial.print("Speed:\t");
     Serial.print(currSpeed);
     Serial.print("\t");
 
@@ -123,7 +123,7 @@ void setup(void) {
   setupHeartRate();
   setupWheel();  
 
-  if (printToMonitor) {
+  if (printToMonitor || printForHuman) {
     Serial.println("Starting....");
   }
 }
@@ -176,10 +176,13 @@ void loop(void) {
    * @brief Determines if a dangerous turn/whip was detected
    * given the vehicles current speed
    * 
+   * Updates dangerousTurnExpected
+   * Updates whippingIncidents
+   * 
    * NOTE: This averages out acceleration over potentially
    * multiple reads. E.g. every Wheel.time_bucket milliseconds
    */
-  bool dangerousTurn = getDangerousTurn(currSpeed);
+  getDangerousTurn(currSpeed);
 
   printData();
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
