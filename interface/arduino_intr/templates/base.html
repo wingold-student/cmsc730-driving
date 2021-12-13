@@ -9,7 +9,7 @@
 <body>
     <div class="container">
 
-        <div class="row">
+        <div class="row my-1">
             <div class="col-6 text-center" style="height: 100%;">
                 <canvas id="foo" style="height:250px;">
                 </canvas>
@@ -23,34 +23,13 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-3 text-center">
+        <div class="row mb-1">
+            <div class="col-4 text-center">
                 <h3>
                     Speed: 
                     <small id="speed">0</small>
                 </h3>
             </div>
-            <div class="col-3 text-center">
-                <h3>
-                    Grip:
-                    <small id="grip">Normal Grip</small>
-                </h3>
-            </div>
-
-            <div class="col-3 text-center">
-                <h3>
-                    Wheel Angle: 
-                    <small id="angle">0.0</small>
-                </h3>
-            </div>
-
-            <div class="col-3 text-center">
-                <h3>
-                    Heart Rate:
-                    <small id="heartrate">0</small>
-                </h3>
-            </div>
-
             <div class="col-4 text-center">
                 <h3>
                     Acceleration:
@@ -64,31 +43,50 @@
                     <small id="brake">None</small>
                 </h3>
             </div>
-
-            <div class="col-3 text-center">
-                <h4 id="whip"></h4>
-            </div>
         </div>
 
-        <div class="row" style="height:100px;">
-            <div class="col-offset-1 col-2">
+        <div class="row mb-1">
+            <div class="col-4 text-center">
+                <h3>
+                    Grip:
+                    <small id="grip">Normal Grip</small>
+                </h3>
+            </div>
+
+            <div class="col-4 text-center">
+                <h3>
+                    Heart Rate:
+                    <small id="heartrate">0</small>
+                </h3>
+            </div>
+
+            <div class="col-4 text-center">
+                <h3>
+                    Wheel Angle: 
+                    <small id="angle">0.0</small>
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="row mb-1" style="height:100px;">
+            <div class="col-4">
                 <h4>Warnings: </h4>
                 <ul id="warnings">
 
                 </ul>
             </div>
             <div class="col-8" id="warning-color">
-
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-1">
             <div class="offset-4 col-4 text-center">
                 <button type="button" class="btn btn-danger" id="end">End</button>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" style="height:150px;">
             <div class="col-4 text-center">
                 <h4 id="wki"></h4>
             </div>
@@ -235,7 +233,6 @@
         var speedSpan = document.getElementById('speed');
         var gripSpan = document.getElementById('grip');
         var angleSpan = document.getElementById('angle');
-        var whipHeader = document.getElementById('whip');
         var heartSpan = document.getElementById('heartrate');
         var accelSpan = document.getElementById('accel');
         var brakeSpan = document.getElementById('brake');
@@ -245,14 +242,14 @@
         var brki = document.getElementById("brki");
 
         var warningsList = document.getElementById("warnings");
-        var warningsColor = document.getElementById("warnings-color");
+        var warningColor = document.getElementById("warning-color");
 
         function clearWarning() {
             while (warningsList.firstChild) {
                 warningsList.removeChild(warningsList.firstChild);
             }
 
-            warningsColor.style.color = "white";
+            warningColor.style.background = "white";
         }
 
         function createListItem(msg) {
@@ -276,7 +273,7 @@
                 warningsList.appendChild(brakeNode);
             }
 
-            warningsColor.style.color = "red";
+            warningColor.style.background = "red";
 
             window.setTimeout(clearWarning, 3000);
         }
@@ -292,9 +289,10 @@
                 var ardData = new TextDecoder().decode(value).split(',');
                 console.log(ardData);
 
-                if (ardData.length == 2) {
-                    wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
+                if (ardData.length == 3) {
                     whpi.innerHTML = "White Knuckle Incidents: " + parseInt(ardData[0]);
+                    wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
+                    brki.innerHTML = "Aggressive Driving Incidents: " + parseInt(ardData[2]);
                 } else {
                     var speedStr = ardData[0] + " mph";
                     var speed = parseInt(speedStr);
@@ -308,7 +306,6 @@
                     turnWheel(wheelAngle);
 
                     var heartRateStr = ardData[3];
-                    //var heartRate = parseInt(heartRate);
 
                     var accelEnum = ardData[4];
                     var accelStr = accelToString(accelEnum);
@@ -345,6 +342,7 @@
             }
         }
         process();
+        // updateWarning(1, 0, 1);
         gauge.set(0);
     </script>
 </body>
