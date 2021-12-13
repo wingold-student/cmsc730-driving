@@ -5,6 +5,9 @@ int brakeReading;
 
 unsigned long oldTime = millis();
 unsigned long currTime = millis();
+unsigned long lastFloor = millis();
+
+int brakingIncidents = 0;
 float currSpeed = 0;
 
 enum GasPress {
@@ -47,6 +50,7 @@ String brakeToString(BrakePress brake) {
 GasPress getGas() {
     gasReading = analogRead(gasPin);
     int speedIncrease = 0;
+    currTime = millis();
     // We'll have a few threshholds, qualitatively determined
     if (gasReading < 5) {
         currGas = NoGas;
@@ -61,11 +65,14 @@ GasPress getGas() {
     } else {
         currGas = DangGas;
         speedIncrease = 2;
+        lastFloor = currTime;
     }
 
-    currTime = millis();
     if ((currTime - oldTime) > 200) {
       currSpeed += speedIncrease;
+      if (currSpeed > 110) {
+        currSpeed = 110;
+      }
       oldTime = currTime;
     }
 
@@ -76,6 +83,7 @@ BrakePress getBrake() {
     brakeReading = analogRead(brakePin);
     int speedDecrease = 0;
     
+    currTime = millis();
     // We'll have a few threshholds, qualitatively determined
     if (brakeReading < 5) {
         currBrake = NoBrake;
@@ -85,9 +93,11 @@ BrakePress getBrake() {
     } else {
         currBrake = DangBrake;
         speedDecrease = 2;
+        if ((currTime - lastFloor) > 5000) {
+          brakingIncidents++;
+        }
     }
 
-    currTime = millis();
     if ((currTime - oldTime) > 200) {
       currSpeed -= speedDecrease;
       oldTime = currTime;
