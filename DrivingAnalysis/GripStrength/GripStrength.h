@@ -49,7 +49,7 @@ GripStrength getGrip() {
 
     if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
         whiteKnuckleIncidents++;
-        whiteKnuckldeIncidentDetected = true;
+        whiteKnuckleIncidentDetected = true;
     }
     whiteKnuckleIncidentDetected = false;
 
