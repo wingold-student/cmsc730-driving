@@ -28,7 +28,8 @@ void setupWheel() {
   //Serial.println("Accel Gyro calibration will start in 5sec.");
   //Serial.println("Please leave the device still on the flat plane.");
   mpu.verbose(false);
-  Serial.println("Calibrating...");
+  
+  // Serial.println("Calibrating...");
   delay(1000);
   mpu.calibrateAccelGyro();
   
@@ -41,7 +42,7 @@ void setupWheel() {
   mpu.setFilterIterations(1);
   
   prev_ms = millis();
-  start_time = prev_ms;
+  // start_time = prev_ms;
 }
 
 void getGyroVel() {
@@ -92,10 +93,10 @@ bool updateAvgGyroAcc(uint32_t time_diff) {
 
     prev_ms = curr_ms;
 
-    Serial.print("AvgAcc:");
-    Serial.print(curr_gyro_acc);
-    Serial.print(", Bucket:");
-    Serial.println(gyro_bucket_size);
+    // Serial.print("AvgAcc:");
+    // Serial.print(curr_gyro_acc);
+    // Serial.print(", Bucket:");
+    // Serial.println(gyro_bucket_size);
 
     return true;
     
