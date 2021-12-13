@@ -5,8 +5,6 @@
 
 bool printToMonitor = true, printForHuman = true;
 
-int currSpeed = 0;
-
 
 void printEndForSerialMonitor() {
     Serial.println("============END============");
@@ -64,7 +62,7 @@ void printData() {
     Serial.print("\t");
 
     Serial.print("Grip:\t");
-    Serial.print(curGrip);
+    Serial.print(gripToString(curGrip));
     Serial.print("\t");
 
     Serial.print("Angle:\t");
@@ -80,8 +78,13 @@ void printData() {
     Serial.print("\t");
 
     // Acceleration
+    Serial.print("Gas:\t");
+    Serial.print(gasToString(currGas));
+    Serial.print("\t");
 
     // Break
+    Serial.print("Brake:\t");
+    Serial.print(brakeToString(currBrake));
 
     Serial.println();
     
@@ -102,11 +105,11 @@ void printData() {
     Serial.print(",");
 
     // Acceleration
-    Serial.print(0);
+    Serial.print(currGas);
     Serial.print(",");
 
     // Break
-    Serial.print(0);
+    Serial.print(currBrake);
 
     Serial.println();
   }
@@ -141,18 +144,16 @@ void loop(void) {
   getGrip();
 
   /**
-   * @brief Get the Grip of the wheel
+   * @brief Get the pressure on Gas
    * 
-   * Updates curGrip value
-   * Updates whiteKnuckleIncidents
+   * Updates curGas value
    */
   getGas();
 
   /**
-   * @brief Get the Grip of the wheel
+   * @brief Get the pressure on Brake
    * 
-   * Updates curGrip value
-   * Updates whiteKnuckleIncidents
+   * Updates curBrake value
    */
   getBrake();
 
