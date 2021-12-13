@@ -1,6 +1,7 @@
 #include "./GripStrength/GripStrength.h"
 #include "./Wheel/Wheel.h"
 #include "./HeartRate/HeartRate.h"
+#include "./Pedals/Pedals.h"
 
 bool printToMonitor = true, printForHuman = true;
 
@@ -140,6 +141,22 @@ void loop(void) {
   getGrip();
 
   /**
+   * @brief Get the Grip of the wheel
+   * 
+   * Updates curGrip value
+   * Updates whiteKnuckleIncidents
+   */
+  getGas();
+
+  /**
+   * @brief Get the Grip of the wheel
+   * 
+   * Updates curGrip value
+   * Updates whiteKnuckleIncidents
+   */
+  getBrake();
+
+  /**
    * @brief Get the Wheel Angle
    * Update the MPU readings
    * Updates actual_angle value, 0 to 360.0
@@ -167,5 +184,5 @@ void loop(void) {
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
   //printDataAsCSV(curGrip, currSpeed, curZGyro);
 
-  //delay(1000);
+  delay(100);
 } 
