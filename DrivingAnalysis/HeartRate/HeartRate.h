@@ -18,13 +18,13 @@ int getHeartRate() {
   if (bleSerial.available() == 4) {
     bleSerial.readBytes(buf, BUFFER_SIZE);
     heartRate = buf[0];
-    Serial.print("Rate: ");
-    Serial.println(heartRate);
+    //Serial.print("Rate: ");
+    //Serial.println(heartRate);
     // Serial.write(bleSerial.read());
   }
   if (Serial.available()) {
     bleSerial.write(Serial.read());
-    Serial.println();
+    //Serial.println();
   }
 
   return heartRate;
