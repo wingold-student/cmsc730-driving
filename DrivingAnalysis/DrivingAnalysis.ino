@@ -3,8 +3,16 @@
 #include "./HeartRate/HeartRate.h"
 #include "./Pedals/Pedals.h"
 
-bool printToMonitor = false, printForHuman = false;
+bool printForHuman = true;
 
+
+void pingUserOnDanger() {
+  if (whiteKnuckleIncidentDetected ||
+      dangerousTurnDetected ||
+      brakingIncidentDetected) {
+        bleSerial.write("!");
+      }
+}
 
 void printEndForSerialMonitor() {
     Serial.println("============END============");
@@ -134,7 +142,7 @@ void setup(void) {
   setupHeartRate();
   setupWheel();  
 
-  if (printToMonitor || printForHuman) {
+  if (printForHuman) {
     Serial.println("Starting....");
   }
 }
@@ -196,9 +204,15 @@ void loop(void) {
    */
   getDangerousTurn(currSpeed);
 
+  /**
+   * @brief Sends message on HM10 for warning
+   * 
+   */
+  pingUserOnDanger();
+
   printData();
   // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
   //printDataAsCSV(curGrip, currSpeed, curZGyro);
 
-  delay(100);
+  // delay(100);
 } 
