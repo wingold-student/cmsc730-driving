@@ -47,11 +47,11 @@ GripStrength getGrip() {
         curGrip = WhiteKnuckleGrip;
     }
 
+    whiteKnuckleIncidentDetected = false;
     if (prevGrip != curGrip && curGrip == WhiteKnuckleGrip) {
         whiteKnuckleIncidents++;
         whiteKnuckleIncidentDetected = true;
     }
-    whiteKnuckleIncidentDetected = false;
 
     return curGrip;
 }
