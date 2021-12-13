@@ -1,4 +1,4 @@
-#include "../lib/MPU9250.h"
+#include "lib/MPU9250.h"
 
 MPU9250 mpu;
 
