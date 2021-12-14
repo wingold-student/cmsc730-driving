@@ -70,23 +70,26 @@
         </div>
 
         <div class="row mb-3" style="height:100px;">
-            <div class="col-4">
+            <div class="offset-1 col-3">
                 <h4>Warnings: </h4>
                 <ul id="warnings">
 
                 </ul>
             </div>
-            <div class="col-8" id="warning-color">
+            <div class="col-7" id="warning-color">
             </div>
         </div>
 
-        <div class="row mb-2">
+        <div class="row mb-2" id="end-area">
             <div class="offset-4 col-4 text-center">
                 <button type="button" class="btn btn-danger" id="end">End</button>
             </div>
         </div>
 
-        <div class="row" id="statistics" style="height:150px; visibility: hidden;">
+        <div class="row mt-3" id="statistics" style="height:150px; visibility: hidden;">
+            <div class="col-12 text-center" style="background-color: #e8e8ff;">
+                <h3>Driving Statistics</h4>
+            </div>
             <div class="col-4 text-center">
                 <h4 id="wki"></h4>
             </div>
@@ -104,17 +107,17 @@
             </div>
         </div>
 
-        <div class="row" id="scores" style="visibility: hidden;">
-            <div class="col-12 text-center">
+        <div class="row mt-3 mb-5" id="scores" style="visibility: hidden;">
+            <div class="col-12 text-center" style="background-color: #e8e8ff;">
                 <h3>Driving Scores</h4>
             </div>
-            <div class="col-6">
+            <div class="col-3 offset-3">
                 <h4>Tension: <small id="tension-score"></small></h4>
                 <div id="tension-summary">
 
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-3">
                 <h4>Aggresion: <small id="aggression-score"></small></h4>
                 <div id="aggresion-summary">
 
@@ -275,6 +278,7 @@
         var currentlyWarning_heart = false;
 
         var gripCount, whipCount, brakeCount, heartRateCount, avgHeartRate;
+        var startTime = null, endTime;
 
         function clearWarning() {
             while (warningsList.firstChild) {
@@ -346,6 +350,10 @@
             var tenseScore = document.getElementById("tense-score");
             var tenseSummary = document.getElementById("tense-summary");
 
+            var elapsedTime = (endTime - startTime) / 1000; // in seconds
+
+            
+            
             /** TODO:
              * Check incident counts and infer meaning
              */
@@ -355,11 +363,15 @@
             //const response = await fetch("/teststream")
             const response = await fetch("/arduino-data")
             const reader = response.body.getReader();
-
+            
             while (true) {
                 const { value, done } = await reader.read();
                 var ardData = new TextDecoder().decode(value).split(',');
                 console.log(ardData);
+
+                if (startTime == null) {
+                    startTime = Date.now();
+                }
 
                 if (ardData.length == 5) {
                     gripCount = parseInt(ardData[0]);
@@ -368,6 +380,8 @@
                     heartRateCount = parseInt(ardData[3]);
                     avgHeartRate = parseFloat(ardData[4]);
 
+                    endTime = Date.now();
+                    document.getElementById("end-area").style.visibility = "hidden";
                     displayStatistics();
                     displayScores();
                 } else {
