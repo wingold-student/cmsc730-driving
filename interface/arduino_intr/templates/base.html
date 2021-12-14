@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <div class="row" style="height:150px;">
+        <div class="row" id="statistics" style="height:150px; visibility: hidden;">
             <div class="col-4 text-center">
                 <h4 id="wki"></h4>
             </div>
@@ -95,6 +95,30 @@
             </div>
             <div class="col-4 text-center">
                 <h4 id="brki"></h4>
+            </div>
+            <div class="col-4 text-center">
+                <h4 id="hri"></h4>
+            </div>
+            <div class="col-4 text-center">
+                <h4 id="hrmedian"></h4>
+            </div>
+        </div>
+
+        <div class="row" id="scores" style="visibility: hidden;">
+            <div class="col-12 text-center">
+                <h3>Driving Scores</h4>
+            </div>
+            <div class="col-6">
+                <h4>Tension: <small id="tension-score"></small></h4>
+                <div id="tension-summary">
+
+                </div>
+            </div>
+            <div class="col-6">
+                <h4>Aggresion: <small id="aggression-score"></small></h4>
+                <div id="aggresion-summary">
+
+                </div>
             </div>
         </div>
 
@@ -240,12 +264,17 @@
         var wki = document.getElementById("wki");
         var whpi = document.getElementById("whpi");
         var brki = document.getElementById("brki");
+        var hri = document.getElementById("hri");
+        var hrmedian = document.getElementById("hrmedian");
 
         var warningsList = document.getElementById("warnings");
         var warningColor = document.getElementById("warning-color");
         var currentlyWarning_grip = false;
         var currentlyWarning_whip = false;
         var currentlyWarning_brake = false;
+        var currentlyWarning_heart = false;
+
+        var gripCount, whipCount, brakeCount, heartRateCount, avgHeartRate;
 
         function clearWarning() {
             while (warningsList.firstChild) {
@@ -256,6 +285,7 @@
             currentlyWarning_grip = false;
             currentlyWarning_whip = false;
             currentlyWarning_brake = false;
+            currentlyWarning_heart = false;
         }
 
         function createListItem(msg) {
@@ -265,7 +295,7 @@
             return node;
         }
 
-        function updateWarning(whiteKnuckle, whip, braking) {
+        function updateWarning(whiteKnuckle, whip, braking, highHeartRate) {
 
             // console.log(whiteKnuckle, whip, braking);
 
@@ -285,14 +315,41 @@
                 warningsList.appendChild(brakeNode);
             }
 
+            if (highHeartRate && !currentlyWarning_heart) {
+                currentlyWarning_heart = true;
+                var heartNode = createListItem("High heart rate!");
+                warningsList.appendChild(heartNode);
+            }
 
-            if (whiteKnuckle == 1 || whip == 1 || braking == 1) {
+            if (whiteKnuckle == 1 || whip == 1 || braking == 1 || highHeartRate) {
                 warningColor.style.background = "red";
                 window.setTimeout(clearWarning, 3000);
             }
-   
         }
 
+        function displayStatistics() {
+            document.getElementById("statistics").style.visibility = "visible";
+
+            whpi.innerHTML = "White Knuckle Incidents: " + gripCount;
+            wki.innerHTML = "Whipping Incidents: " + whipCount;
+            brki.innerHTML = "Aggressive Driving Incidents: " + brakeCount;
+            hri.innerHTML = "High Heart Rate Occurrences: " + heartRateCount;
+            hrmedian.innerHTML = "Median Heart Rate: " + avgHeartRate + " BPM";
+        }
+
+        function displayScores() {
+            document.getElementById("scores").style.visibility = "visible";
+
+            var aggressionScore = document.getElementById("aggression-score");
+            var aggressionSummary = document.getElementById("aggresion-summary");
+
+            var tenseScore = document.getElementById("tense-score");
+            var tenseSummary = document.getElementById("tense-summary");
+
+            /** TODO:
+             * Check incident counts and infer meaning
+             */
+        }
 
         async function process() {
             //const response = await fetch("/teststream")
@@ -304,10 +361,15 @@
                 var ardData = new TextDecoder().decode(value).split(',');
                 console.log(ardData);
 
-                if (ardData.length == 3) {
-                    whpi.innerHTML = "White Knuckle Incidents: " + parseInt(ardData[0]);
-                    wki.innerHTML = "Whipping Incidents: " + parseInt(ardData[1]);
-                    brki.innerHTML = "Aggressive Driving Incidents: " + parseInt(ardData[2]);
+                if (ardData.length == 5) {
+                    gripCount = parseInt(ardData[0]);
+                    whipCount = parseInt(ardData[1]);
+                    brakeCount = parseInt(ardData[2]);
+                    heartRateCount = parseInt(ardData[3]);
+                    avgHeartRate = parseFloat(ardData[4]);
+
+                    displayStatistics();
+                    displayScores();
                 } else {
                     var speedStr = ardData[0] + " mph";
                     var speed = parseInt(speedStr);
@@ -337,9 +399,12 @@
                     var whiteKnuckleIncStr = ardData[8];
                     var whiteKnuckleIncInt = parseInt(whiteKnuckleIncStr);
 
-                    updateWarning(whiteKnuckleIncInt, whipInt, brakeIncInt);
+                    var highHeartRateIncStr = ardData[9];
+                    var highHeartRateIncInt = parseInt(highHeartRateIncStr);
 
-                    console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRateStr);
+                    updateWarning(whiteKnuckleIncInt, whipInt, brakeIncInt, highHeartRateIncInt);
+
+                    // console.log("Speed: " + speed + " Grip: " + gripStr + "Wheel Angle: " + wheelAngle + " Dangeroud Turn Detected: " + whipFullStr + "Heart Rate: " + heartRateStr);
                     
                     speedSpan.innerHTML = speedStr;
                     gripSpan.innerHTML = gripStr;
