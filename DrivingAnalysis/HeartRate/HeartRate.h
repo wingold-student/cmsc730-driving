@@ -5,12 +5,17 @@ int TX_PIN = 10, RX_PIN = 11;
 const int BUFFER_SIZE = 4;
 byte buf[BUFFER_SIZE] = {0};
 
-int heartRate = 0;
+const static highHeartRateThreshold = 95, heartRateCount = 0;
+const static float medianHeartRate = 0;
+unsigned long lastHighHeartRate = 0, thirtyMin = 1800000;
+int heartRate = 0, highHeartRateIncidents = 0;
+bool highHeartRate = false;
 
 SoftwareSerial bleSerial(RX_PIN, TX_PIN);
 
 void setupHeartRate() {
   bleSerial.begin(9600);
+  lastHighHeartRate = millis();
 }
 
 int getHeartRate() {
@@ -18,13 +23,24 @@ int getHeartRate() {
   if (bleSerial.available() == 4) {
     bleSerial.readBytes(buf, BUFFER_SIZE);
     heartRate = buf[0];
-    //Serial.print("Rate: ");
-    //Serial.println(heartRate);
-    // Serial.write(bleSerial.read());
+
+    medianHeartRate += heartRate;
+    heartRateCount += 1;
+    medianHeartRate /= heartRateCount;
+
+    unsigned long sinceLastHighRate = millis() - lastHighHeartRate;
+    if (heartRate > highHeartRateThreshold && sinceLastHighRate > thirtyMin) {
+      highHeartRate = true;
+      highHeartRateIncidents += 1;
+    } else {
+      highHeartRate = false;
+    }
   }
+
+  // Send data to connected peripheral
+  // Will cause a ping and notifcation on Apple Watch
   if (Serial.available()) {
     bleSerial.write(Serial.read());
-    //Serial.println();
   }
 
   return heartRate;
