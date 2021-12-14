@@ -14,94 +14,7 @@ void pingUserOnDanger() {
       }
 }
 
-void printEndForSerialMonitor() {
-    Serial.println("============END============");
-    Serial.print("Whipping Incidents: ");
-    Serial.println(whippingIncidents);
-    Serial.print("White Knuckle Incidents: ");
-    Serial.println(whiteKnuckleIncidents);
-    Serial.flush();
-}
-
-void printOutputForSerialMonitor(int fsrReading, GripStrength curGrip, int currSpeed, float curZGyro) {
-  Serial.print("Analog reading: ");
-  Serial.print(fsrReading);     // the raw analog reading
-  Serial.print(" Current Speed: ");
-  Serial.print(currSpeed);
-  Serial.print(" ");
-
-  Serial.print("Z Gyro (degs/s):");
-  Serial.print(curZGyro);
-  Serial.print(" - ");
-
-  Serial.println(gripToString(curGrip));
-
-  if (isDangerousTurn(currSpeed, curZGyro)) {
-    Serial.println("DANGEROUS TURN DETECTED");
-  }
-}
-
-void printDataAsCSV(GripStrength curGrip, int currSpeed, float curZGyro) {
-  Serial.print(currSpeed);
-  Serial.print(",");
-  Serial.print(curGrip);
-  Serial.print(",");
-  Serial.print(curZGyro);
-  Serial.print(",");
-  if (isDangerousTurn(currSpeed, curZGyro)) {
-    Serial.print(1);
-  } else {
-    Serial.print(0);
-  }
-  Serial.println("");
-}
-
-void printEndAsCSV() {
-  Serial.print(whiteKnuckleIncidents);
-  Serial.print(",");
-  
-  Serial.print(whippingIncidents);
-  Serial.print(",");
-
-  Serial.println(brakingIncidents);
-
-  Serial.flush();
-}
-
-void printData() {
-  if (printForHuman) {
-    Serial.print("Speed:\t");
-    Serial.print(currSpeed);
-    Serial.print("\t");
-
-    Serial.print("Grip:\t");
-    Serial.print(gripToString(curGrip));
-    Serial.print("\t");
-
-    Serial.print("Angle:\t");
-    Serial.print(actual_angle);
-    Serial.print("\t");
-
-    Serial.print("DangerousTurn:\t");
-    Serial.print(dangerousTurnDetected);
-    Serial.print("\t");
-
-    Serial.print("HeartRate:\t");
-    Serial.print(heartRate);
-    Serial.print("\t");
-
-    // Acceleration
-    Serial.print("Gas:\t");
-    Serial.print(gasToString(currGas));
-    Serial.print("\t");
-
-    // Break
-    Serial.print("Brake:\t");
-    Serial.print(brakeToString(currBrake));
-
-    Serial.println();
-    
-  } else {
+void printDataForProcessing() {
     Serial.print(currSpeed);
     Serial.print(",");
 
@@ -122,6 +35,7 @@ void printData() {
     Serial.print(currBrake);
     Serial.print(",");
 
+    // Warning Detection
     Serial.print(dangerousTurnDetected);
     Serial.print(",");
 
@@ -129,8 +43,92 @@ void printData() {
     Serial.print(",");
 
     Serial.print(whiteKnuckleIncidentDetected);
+    Serial.print(",");
+
+    Serial.print(highHeartRate);
 
     Serial.println();
+}
+
+void printDataForHuman() {
+  Serial.print("Speed:\t");
+  Serial.print(currSpeed);
+  Serial.print("\t");
+
+  Serial.print("Grip:\t");
+  Serial.print(gripToString(curGrip));
+  Serial.print("\t");
+
+  Serial.print("Angle:\t");
+  Serial.print(actual_angle);
+  Serial.print("\t");
+
+  Serial.print("DangerousTurn:\t");
+  Serial.print(dangerousTurnDetected);
+  Serial.print("\t");
+
+  Serial.print("HeartRate:\t");
+  Serial.print(heartRate);
+  Serial.print("\t");
+
+  // Acceleration
+  Serial.print("Gas:\t");
+  Serial.print(gasToString(currGas));
+  Serial.print("\t");
+
+  // Break
+  Serial.print("Brake:\t");
+  Serial.print(brakeToString(currBrake));
+
+  Serial.println();
+}
+
+void printEndForProcessing() {
+  Serial.print(whiteKnuckleIncidents);
+  Serial.print(",");
+  
+  Serial.print(whippingIncidents);
+  Serial.print(",");
+
+  Serial.print(brakingIncidents);
+  Serial.print(",");
+
+  Serial.print(highHeartRateIncidents);
+  Serial.print(",");
+
+  Serial.println(medianHeartRate);
+
+  Serial.flush();
+}
+
+void printEndForHuman() {
+  Serial.println("============END============");
+  Serial.print("Whipping Incidents: ");
+  Serial.println(whippingIncidents);
+  Serial.print("White Knuckle Incidents: ");
+  Serial.println(whiteKnuckleIncidents);
+  Serial.print("Hard Brake then Flooring Incidents: ");
+  Serial.println(brakingIncidents);
+  Serial.print("High Heart Rate Incidents: ");
+  Serial.println(highHeartRateIncidents);
+  Serial.print("Median Heart Rate: ");
+  Serial.println(medianHeartRate);
+  Serial.flush();
+}
+
+void printEndStats() {
+  if (printForHuman) {
+    printEndForHuman();
+  } else {
+    printEndForProcessing();
+  }
+}
+
+void printData() {
+  if (printForHuman) {
+    printDataForHuman();
+  } else {
+    printDataForProcessing();
   }
 }
 
@@ -149,8 +147,7 @@ void setup(void) {
  
 void loop(void) {
   if (Serial.available() > 0) {
-    // printEndForSerialMonitor();
-    printEndAsCSV();
+    printEndStats();
     exit(0);
   }
 
@@ -211,8 +208,7 @@ void loop(void) {
   pingUserOnDanger();
 
   printData();
-  // printOutputForSerialMonitor(fsrReading, curGrip, currSpeed, curZGyro);
-  //printDataAsCSV(curGrip, currSpeed, curZGyro);
 
+  // Needed to let web server process data
   delay(100);
 } 
