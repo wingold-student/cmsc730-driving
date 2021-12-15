@@ -1,5 +1,5 @@
-int gasPin = 1; 
-int brakePin = 2;
+int gasPin = 2; 
+int brakePin = 1;
 int gasReading;
 int brakeReading;
 
