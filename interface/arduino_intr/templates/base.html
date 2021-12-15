@@ -357,6 +357,45 @@
             /** TODO:
              * Check incident counts and infer meaning
              */
+            var aggScore, aggSummary, tenseScore, tenseSummary, hrScore;
+            
+            // Calculate Aggression Score
+            aggScore = (brakeCount + whipCount)/elapsedTime*600
+            if (aggScore <=1){
+                aggSummary = "Safe";
+            } else if (aggScore <= 4){
+                aggSummary = "Slightly Aggressive";
+            } else if (aggScore <= 8){
+                aggSummary = "Aggressive";
+            } else {
+                aggSummary = "Very Aggressive";
+            }
+
+            aggressionSummary.innerHTML = aggSummary;
+
+            // Calculate Tenseness Score
+            if (avgHeartRate <= 90) {
+                hrScore = 1;
+            } else if (avgHeartRate <= 110) {
+                hrScore = 2;
+            } else if (avgHeartRate <= 110) {
+                hrScore = 4;
+            } else {
+                hrScore = 8;
+            }
+
+            tenseScore = (1 + gripCount) * hrScore / elapsedTime * 600
+            if (tenseScore <=1){
+                tSummary = "Safe";
+            } else if (tenseScore <= 4){
+                tSummary = "Slightly Aggressive";
+            } else if (tenseScore <= 8){
+                tSummary = "Aggressive";
+            } else {
+                tSummary = "Very Aggressive";
+            }
+
+            tenseSummary.innerHTML = tSummary;
         }
 
         async function process() {
