@@ -105,6 +105,10 @@
             <div class="col-4 text-center">
                 <h4 id="hrmedian"></h4>
             </div>
+            <div class="col-4 text-center">
+                <h4 id="drivingTime"></h4>
+            </div>
+
         </div>
 
         <div class="row mt-3 mb-5" id="scores" style="visibility: hidden;">
@@ -119,7 +123,7 @@
             </div>
             <div class="col-3">
                 <h4>Aggresion: <small id="aggression-score"></small></h4>
-                <div id="aggresion-summary">
+                <div id="aggression-summary">
 
                 </div>
             </div>
@@ -269,6 +273,7 @@
         var brki = document.getElementById("brki");
         var hri = document.getElementById("hri");
         var hrmedian = document.getElementById("hrmedian");
+        var drivingTime = document.getElementById("drivingTime");
 
         var warningsList = document.getElementById("warnings");
         var warningColor = document.getElementById("warning-color");
@@ -344,21 +349,22 @@
         function displayScores() {
             document.getElementById("scores").style.visibility = "visible";
 
-            var aggressionScore = document.getElementById("aggression-score");
-            var aggressionSummary = document.getElementById("aggresion-summary");
+            var aggressionScoreElement = document.getElementById("aggression-score");
+            var aggressionSummary = document.getElementById("aggression-summary");
 
-            var tenseScore = document.getElementById("tense-score");
-            var tenseSummary = document.getElementById("tense-summary");
+            var tenseScoreElement = document.getElementById("tension-score");
+            var tenseSummary = document.getElementById("tension-summary");
 
             var elapsedTime = (endTime - startTime) / 1000; // in seconds
-
-            
+            var minutes = parseInt(elapsedTime / 60);
+            var seconds = parseInt(elapsedTime % 60);
+            drivingTime.innerHTML = minutes + "Driving Time: Minutes and " + seconds + " seconds";
             
             /** TODO:
              * Check incident counts and infer meaning
              */
             var aggScore, aggSummary, tenseScore, tSummary, hrScore;
-            
+
             // Calculate Aggression Score
             aggScore = (brakeCount + whipCount)/elapsedTime*600
             if (aggScore <=1){
@@ -369,9 +375,11 @@
                 aggSummary = "Aggressive";
             } else {
                 aggSummary = "Very Aggressive";
+                aggScore = 10;
             }
 
             aggressionSummary.innerHTML = aggSummary;
+            aggressionScoreElement.innerHTML = aggScore;
 
             // Calculate Tenseness Score
             if (avgHeartRate <= 90) {
@@ -388,14 +396,16 @@
             if (tenseScore <=1){
                 tSummary = "Safe";
             } else if (tenseScore <= 4){
-                tSummary = "Slightly Aggressive";
+                tSummary = "Slightly Tense";
             } else if (tenseScore <= 8){
-                tSummary = "Aggressive";
+                tSummary = "Quite Tense";
             } else {
-                tSummary = "Very Aggressive";
+                tSummary = "Super Tense";
+                tenseScore = 10;
             }
 
             tenseSummary.innerHTML = tSummary;
+            tenseScoreElement.innerHTML = tenseScore;
         }
 
         async function process() {
