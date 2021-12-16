@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreBluetooth
+import WatchKit
 
 class HBViewModel : NSObject, ObservableObject, Identifiable {
     var id = UUID()
@@ -58,7 +59,7 @@ extension HBViewModel: CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("Discovered \(peripheral.name ?? "UNKNWON")")
+        print("Discovered \(peripheral.name ?? "UNKNOWN")")
         central.stopScan()
         
         connectedPeripheral = peripheral
@@ -132,8 +133,11 @@ extension HBViewModel : CBPeripheralDelegate {
             
             if let answer = bytes.first {
                 DispatchQueue.main.async {
-                    self.output = "\(answer)"
+                    self.output = "WARNING!"
+                    print("Answer: \(answer)")
                 }
+                
+                WKInterfaceDevice.current().play(WKHapticType.notification)
             }
         }
     }

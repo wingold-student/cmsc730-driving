@@ -1,3 +1,13 @@
+/**
+ * Credit to Luciano Amoroso:
+ * https://github.com/amorosoluciano/SwiftFun/blob/master/ContentView.swift
+ *
+ * For base work for heart rate measurement
+ *
+ * Credit to Rob Kerr for Bluetooth Comms and some design elements
+ * https://github.com/robkerr/BlogProjects/tree/main/BLECalculator
+ */
+
 import SwiftUI
 import HealthKit
 import CoreBluetooth
@@ -47,12 +57,14 @@ struct ContentView: View {
     func start() {
         authorizeHealthKit()
         startHeartRateQuery(quantityTypeIdentifier: .heartRate)
-
+        viewModel.connectDriver()
+        /*
         Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true, block: { timer in
             print("Sending \(value)")
             let data = withUnsafeBytes(of: value) { Data($0) }
             viewModel.send(data)
         })
+         */
     }
     
     func authorizeHealthKit() {
@@ -98,6 +110,11 @@ struct ContentView: View {
             }
             
             self.value = Int(lastHeartRate)
+
+            if (viewModel.connected) {
+                let data = withUnsafeBytes(of: self.value) { Data($0) }
+                viewModel.send(data)
+            }
         }
     }
 }
