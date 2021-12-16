@@ -125,6 +125,8 @@ void printEndStats() {
 }
 
 void printData() {
+  medianHeartRate = sumHeartRate / heartRateCount;
+
   if (printForHuman) {
     printDataForHuman();
   } else {
@@ -210,5 +212,5 @@ void loop(void) {
   printData();
 
   // Needed to let web server process data
-  delay(100);
+  delay(150);
 } 

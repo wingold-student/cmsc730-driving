@@ -5,10 +5,10 @@ int TX_PIN = 10, RX_PIN = 11;
 const int BUFFER_SIZE = 4;
 byte buf[BUFFER_SIZE] = {0};
 
-const static int highHeartRateThreshold = 95;
+const static int highHeartRateThreshold = 205;
 static float medianHeartRate = 0;
 unsigned long lastHighHeartRate = 0, thirtyMin = 1800000;
-int heartRate = 0, highHeartRateIncidents = 0, heartRateCount = 0;
+int heartRate = 0, highHeartRateIncidents = 0, heartRateCount = 0, sumHeartRate = 0;
 bool highHeartRate = false;
 
 SoftwareSerial bleSerial(RX_PIN, TX_PIN);
@@ -24,9 +24,8 @@ int getHeartRate() {
     bleSerial.readBytes(buf, BUFFER_SIZE);
     heartRate = buf[0];
 
-    medianHeartRate += heartRate;
+    sumHeartRate += heartRate;
     heartRateCount += 1;
-    medianHeartRate /= heartRateCount;
 
     unsigned long sinceLastHighRate = millis() - lastHighHeartRate;
     if (heartRate > highHeartRateThreshold && sinceLastHighRate > thirtyMin) {
