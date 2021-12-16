@@ -343,7 +343,7 @@
             wki.innerHTML = "Whipping Incidents: " + whipCount;
             brki.innerHTML = "Aggressive Driving Incidents: " + brakeCount;
             hri.innerHTML = "High Heart Rate Occurrences: " + heartRateCount;
-            hrmedian.innerHTML = "Median Heart Rate: " + avgHeartRate + " BPM";
+            hrmedian.innerHTML = "Average Heart Rate: " + avgHeartRate + " BPM";
         }
 
         function displayScores() {
@@ -358,7 +358,7 @@
             var elapsedTime = (endTime - startTime) / 1000; // in seconds
             var minutes = parseInt(elapsedTime / 60);
             var seconds = parseInt(elapsedTime % 60);
-            drivingTime.innerHTML = minutes + "Driving Time: Minutes and " + seconds + " seconds";
+            drivingTime.innerHTML = "Driving Time: " + minutes + " minutes and " + seconds + " seconds";
             
             /** TODO:
              * Check incident counts and infer meaning
@@ -433,7 +433,7 @@
                     document.getElementById("end-area").style.visibility = "hidden";
                     displayStatistics();
                     displayScores();
-                } else {
+                } else if (ardData.length == 10) {
                     var speedStr = ardData[0] + " mph";
                     var speed = parseInt(speedStr);
                     gauge.set(speed);
